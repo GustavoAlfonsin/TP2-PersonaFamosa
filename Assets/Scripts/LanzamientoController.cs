@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class LanzamientoController : MonoBehaviour
     public RectTransform flechaUI;
     public Image barraFuerza;
     public GameObject poncho;
+    public TMP_Text txtIntruccion;
 
     [Header("Angulo")]
     public float velocidadRotacion = 120f;
@@ -46,6 +48,7 @@ public class LanzamientoController : MonoBehaviour
     {
         if (state == Estado.Esperando)
         {
+            txtIntruccion.text = "Presiona la pantalla para elegir el angulo del lanzamiento";
             if (Input.GetMouseButtonDown(0))
             {
                 state = Estado.SeleccionAngulo;
@@ -53,10 +56,10 @@ public class LanzamientoController : MonoBehaviour
             }
         } else if (state == Estado.SeleccionAngulo)
         {
-            Debug.Log("Esta con el angulo");
             if (Input.GetMouseButton(0))
             {
                 actualizarAngulo();
+                txtIntruccion.text = "Deja de presionar para seleccionar el angulo";
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -64,12 +67,14 @@ public class LanzamientoController : MonoBehaviour
                 state = Estado.SeleccionFuerza;
                 flechaUI.gameObject.SetActive(false);
                 barraFuerza.gameObject.SetActive(true);
+                txtIntruccion.text = "Presiona la pantalla para determinar la fuerza";
             }
         }else if (state == Estado.SeleccionFuerza)
         {
             if (Input.GetMouseButton(0))
             {
                 ActualizarFuerza();
+                txtIntruccion.text = "Deja de presionar para seleccionar la fuerza";
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -77,6 +82,7 @@ public class LanzamientoController : MonoBehaviour
                 barraFuerza.gameObject.SetActive(false);
                 LanzarPoncho();
                 state = Estado.Lanzado;
+                txtIntruccion.text = string.Empty;
             }
         }
     }

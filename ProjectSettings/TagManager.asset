@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Publico
+  - Moneda
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - CapaMoneda
   - Water
   - UI
   - 
