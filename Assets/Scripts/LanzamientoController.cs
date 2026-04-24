@@ -93,7 +93,7 @@ public class LanzamientoController : MonoBehaviour
         rb.isKinematic = false;
         float rad = anguloActual * Mathf.Deg2Rad;
         Vector3 direccion = new Vector3(0, Mathf.Sin(rad), Mathf.Cos(rad));
-        Debug.Log(direccion);
+        poncho.GetComponent<Poncho>().iniciarVuelo();
         poncho.transform.rotation = Quaternion.identity;
         rb.velocity = direccion * fuerzaActual * multiplicadorFuerza;
     }
@@ -146,7 +146,15 @@ public class LanzamientoController : MonoBehaviour
             anguloActual = 0f;
             subiendo = true;
         }
-        Debug.Log("Angulo: " + anguloActual);
         flechaUI.localRotation = Quaternion.Euler(0,0,anguloActual);
+    }
+
+    public void reiniciarEstado()
+    {
+        state = Estado.Esperando;
+        fuerzaActual = 0f;
+        anguloActual = 0f;
+        flechaUI.localRotation = Quaternion.Euler(0, 0, anguloActual);
+        barraFuerza.fillAmount = fuerzaActual / fuerzaMax;
     }
 }

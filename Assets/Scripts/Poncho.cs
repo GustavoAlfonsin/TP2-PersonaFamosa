@@ -12,6 +12,7 @@ public class Poncho : MonoBehaviour
     public LayerMask capaMoneda;
     public Vector3 tamañoDetección = new Vector3(2f,2f,2f);
     public float puntosPorMoneda = 10f;
+    public float puntos = 0;
 
     private Rigidbody rb;
     private bool enVuelo = false;
@@ -23,13 +24,20 @@ public class Poncho : MonoBehaviour
 
     private void Update()
     {
-        
+        if (enVuelo)
+        {
+            calcularDistancia();
+            detectarMonedas();
+
+            GameManager.instance.ActualizarUI(distanciaRecorrida, puntos);
+        }
     }
 
     public void iniciarVuelo()
     {
         posicionInicial = transform.position;
         distanciaRecorrida = 0f;
+        puntos = 0;
         enVuelo = true;
     }
 
@@ -49,7 +57,7 @@ public class Poncho : MonoBehaviour
         {
             if (moneda.CompareTag("Moneda"))
             {
-                //Sumar puntos en el GameManager
+                puntos += puntosPorMoneda;
                 Destroy(moneda.gameObject);
             }
         }
@@ -66,18 +74,23 @@ public class Poncho : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
 
-            //Avisar al gameManager que se termina el juego
+            GameManager.instance.FinDelJuego(distanciaRecorrida, puntos);
         }
     }
 
     public void reiniciar(Vector3 nuevaPosicion)
     {
-        transform.position = nuevaPosicion;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        transform.position = posicionInicial;
+        transform.rotation = Quaternion.identity;
+        if (!rb.isKinematic)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
         rb.isKinematic = true;
 
         distanciaRecorrida = 0f;
+        puntos = 0;
         enVuelo = false;
     }
 
